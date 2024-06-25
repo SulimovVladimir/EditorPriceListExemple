@@ -7,15 +7,18 @@ namespace EditorPriceListExemple.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly AppDBContext _appDB;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, AppDBContext appDB)
         {
             _logger = logger;
+            _appDB = appDB;
         }
 
         public IActionResult Index()
         {
-            return View();
+            PriceList priceList = _appDB.PriceLists.First();
+            return View(priceList);
         }
 
         public IActionResult Privacy()

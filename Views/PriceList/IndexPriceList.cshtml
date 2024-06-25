@@ -1,0 +1,56 @@
+﻿@model IEnumerable<PriceList>
+
+@{
+    ViewData["Title"] = "Прайс-листы";
+    Layout = "_Layout";
+}
+
+<form name="My" class="ms-3 me-3">
+    <div class="input-group mb-3">
+        <input type="submit" value="Добавить прайс-лист" class="btn-secondary" asp-controller="PriceList" asp-action="AddPriceList" />
+        <input class="form-control" type="text" id="searchPriceList" placeholder="Поиск по названию" onkeyup="search()" />
+    </div>
+<table id="allPriceList" class="table-bordered table table-hover table-striped">
+    <thead class="bg-light">
+        <td>№</td>
+        <td>Название</td>
+    </thead>
+    @{
+        int count = Model.Count();
+        foreach (var priceList in Model)
+        {
+            <tr ondblclick="editRecord(@priceList.PriceListID)">
+                <td>@(count--)</td>
+                <td>@priceList.PriceListName</td>
+                <td class="text-center"><a class="btn p-1 btn-light border border-2" asp-action="ShowPriceList" asp-controller="PriceList">Просмотр</a></td>
+            </tr>
+        }
+    }
+</table>
+</form>
+
+<script>
+    function editRecord(s) {
+
+        location.href = "@Url.Action("EditPriceList", "PriceList", new { PriceListID = "cid" })".replace("cid", s.toString());
+    }
+
+    function search() {
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("searchPriceList");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("allPriceList");
+        tr = table.getElementsByTagName("tr");
+
+        for (i = 1; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>

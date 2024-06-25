@@ -1,16 +1,20 @@
+using EditorPriceListExemple.Interface;
 using EditorPriceListExemple.Models;
+using EditorPriceListExemple.Repository;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add services to the container.
 string connection = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AppDBContext>(options => options.UseSqlServer(connection));
 
-
-// Add services to the container.
+builder.Services.AddTransient<IGoods, GoodsRepository>();
+builder.Services.AddTransient<IPriceList,PriceListRepository>();
+builder.Services.AddTransient<IAttribute, AttrebuteRepository>();
 builder.Services.AddControllersWithViews();
 
-
+builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 
 var app = builder.Build();
 
@@ -27,6 +31,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=PriceList}/{action=IndexPriceList}/{id?}");
 
 app.Run();

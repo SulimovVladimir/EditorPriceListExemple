@@ -1,0 +1,110 @@
+﻿@model PriceList;
+
+@{
+    ViewData["Title"] = "Добавление прайс-листа";
+    Layout = "_Layout";
+}
+
+
+@* <div class="validation-summary-errors" style="margin-left: 50px" asp-validation-summary="ModelOnly"></div>
+<form asp-action="CardPriceList" asp-controller="PriceList" style="margin-left: 50px ; margin-right: 50px">
+    <input type="hidden" asp-for="PriceListID" />
+    <div class="form-group">
+        <label asp-for="PriceListName" class="control-label">Название прайс-листа</label><br />
+        <input type="text" asp-for="PriceListName" class="form-control" />
+        <span class="field-validation-error" asp-validation-for="PriceListName"></span>
+    </div><br />
+
+          
+    <div class="form-group">
+        <input type="submit" value="Сохранить" class="btn btn-outline-dark bg-secondary text-white" />
+    </div>
+</form> *@
+
+<form asp-action="CardPriceList" asp-controller="PriceList" style="margin-left: 50px ; margin-right: 50px">
+
+    <h3>  <input type="text" class="w-100 border-0 text-center" asp-for="PriceListName" /></></h3>
+    <input type="hidden" asp-for="PriceListID" />
+  
+    <div class="form-group mb-2">
+        <input type="submit" value="Сохранить" class="btn btn-outline-dark bg-secondary text-white" />
+        <a class="ms-3 btn btn-outline-dark bg-secondary text-white" asp-action="IndexPriceList" asp-controller="PriceList" />Отмена</a>
+    </div>
+
+<div id="listAttributes">
+    @{
+        if (Model.AttributesGoods != null)
+        {
+            for (int i = 0; i < Model.AttributesGoods.Count(); i++)
+            {
+                                                            <input type="hidden" asp-for="@Model.AttributesGoods[i].AttributeGoodsID" />
+
+                                                                <div class="input-group">
+                                            <label class="input-group-text colCount" ></label>
+                                                                    <input type="text" name="AttributesGoods[@i].NameAttributeGoods" id="AttributesGoods[@i].NameAttributeGoods" class="form-control" value="@Model.AttributesGoods[i].NameAttributeGoods" />
+                                                                    <select class="form-select" asp-items="@ViewBag.TypeAttribute" asp-for="AttributesGoods[i].TypeAttributeID"></select>
+                                                                    <input type="button" id="deleteButton" class="input-group-textl" value="Удалить" onclick="deleteAttribute(@i)" />
+                                                                </div>
+
+            }
+        }
+    }
+
+</div>
+
+    <input type="button" class="mt-2 btn bg-secondary text-white" value="Добавить колонку" onclick="addAttribute()" />
+
+</form>
+
+<select class="d-none form-select" id="TypeSelect" asp-items="@ViewBag.TypeAttribute"></select>
+
+<script>
+    let JScount = document.getElementsByClassName("colCount").length;
+
+    function addAttribute() {
+        let container = document.getElementById("listAttributes");
+        let div = document.createElement("div");
+        div.setAttribute("class", "input-group");
+        let tr = document.createElement("tr");
+        let label = document.createElement("label");
+        label.setAttribute("class", "input-group-text");
+        label.classList.add("colCount");
+        
+
+        let field1 = document.createElement("input");
+        field1.setAttribute("class", "form-control");
+        field1.setAttribute("name", "AttributesGoods[" + JScount + "].NameAttributeGoods");
+        field1.setAttribute("id", "AttributesGoods[" + JScount + "].NameAttributeGoods");
+        field1.setAttribute("type", "text");
+
+        let field2 = document.getElementById("TypeSelect").cloneNode(true);
+        field2.setAttribute("name", "AttributesGoods[" + JScount + "].TypeAttributeID");
+        field2.setAttribute("id", "AttributesGoods[" + JScount + "].TypeAttributeID");
+        field2.classList.remove('d-none');
+
+        let field3 = document.getElementById("deleteButton").cloneNode(true);
+        field3.setAttribute("onclick", "deleteAttribute(" + JScount + ")");
+
+        div.appendChild(label);
+        div.appendChild(field1);
+        div.appendChild(field2);
+        div.appendChild(field3);
+        container.appendChild(div);
+        setColCount();
+    }
+
+    function deleteAttribute(elem) {
+        let record = document.getElementById("AttributesGoods[" + elem + "].NameAttributeGoods").parentElement;
+        record.remove();
+        setColCount();
+    }
+
+    function setColCount() { 
+        let listCol = document.getElementsByClassName("colCount");
+        for (let i = 0; i < listCol.length; i++) { 
+            listCol[i].innerHTML = "Колонка " + (i + 1);
+        }
+    }
+        document.addEventListener("DOMContentLoaded", setColCount);
+   
+</script>

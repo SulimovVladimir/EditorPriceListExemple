@@ -1,7 +1,10 @@
-﻿namespace EditorPriceListExemple.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace EditorPriceListExemple.Models
 {
     public class AttributeGoodsWithValue
     {
+        [Key]
         public int RecordAttributeGoodsID { get; set; }
         public int GoodsID { get; set; }
         public Goods Goods { get; set; }
